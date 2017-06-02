@@ -5,12 +5,15 @@ organization := "im.dlg"
 
 name := "dialog-push-service"
 
-version := "0.0.3"
+version := "0.0.4"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
+
+crossScalaVersions := Seq("2.11.11", "2.12.2")
 
 libraryDependencies ++= Seq(
-  "io.grpc" % "grpc-netty" % "1.2.0",
+  "io.grpc" % "grpc-stub" % "1.5.0",
+  "io.grpc" % "grpc-netty" % "1.5.0",
   "com.trueaccord.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf",
   "com.trueaccord.scalapb" %% "scalapb-runtime-grpc" % scalapbVersion
 )
