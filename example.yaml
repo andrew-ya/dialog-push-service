@@ -11,6 +11,12 @@ google:
     retries: 10
     sandbox: false
 apple:
+  - project-id: 100500
+    topic: im.dlg.dialog-ee
+    voip: false
+    allow-alerts: true
+    sandbox: false
+    pem: /config/production-big.pem
   - project-id: 100501
     topic: im.dlg.dialog-ee
     voip: false

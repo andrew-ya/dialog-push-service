@@ -4,6 +4,7 @@ package main;
 
 message SilentPush {}
 
+
 message Localizeable {
     string loc_key = 1;
     repeated string loc_args = 2;
@@ -19,7 +20,7 @@ message AlertingPush {
         string simple_alert_title = 4;
     }
     string sound = 5;
-    int32 badge = 6;
+    oneof badge { int32 badge_value = 6; }
 }
 
 message VoipPush {

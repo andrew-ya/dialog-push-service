@@ -1,12 +1,13 @@
 package main
 
 import (
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/edganiukov/fcm"
 	"github.com/prometheus/client_golang/prometheus"
-	"time"
-	"strings"
 	"go.uber.org/zap"
-	"strconv"
 )
 
 var fcmIOHistogram = prometheus.NewHistogram(prometheus.HistogramOpts{Namespace: "google", Name: "fcm_io", Help: "Time spent in interactions with FCM"})
@@ -31,8 +32,8 @@ func (d GoogleDeliveryProvider) shouldInvalidate(err string) bool {
 func fcmFromAlerting(n *fcm.Notification, alerting *AlertingPush) *fcm.Notification {
 	n.Title = alerting.GetSimpleAlertTitle()
 	n.Body = alerting.GetSimpleAlertBody()
-	if badge := alerting.GetBadge(); badge > 0 {
-		n.Badge = strconv.Itoa(int(badge))
+	if badge := alerting.GetBadge(); badge != nil {
+		n.Badge = strconv.Itoa(int(alerting.GetBadgeValue()))
 	}
 	return n
 }
@@ -89,9 +90,9 @@ func (d GoogleDeliveryProvider) spawnWorker(workerName string) {
 		return
 	}
 	subsystemName := strings.Replace(workerName, ".", "_", -1)
-	successCount := prometheus.NewCounter(prometheus.CounterOpts{Namespace:"google", Subsystem: subsystemName, Name: "processed_tasks", Help: "Tasks processed by worker"})
-	failsCount := prometheus.NewCounter(prometheus.CounterOpts{Namespace:"google", Subsystem: subsystemName, Name: "failed_tasks", Help: "Failed tasks"})
-	pushesSent := prometheus.NewCounter(prometheus.CounterOpts{Namespace:"google", Subsystem: subsystemName, Name: "pushes_sent", Help: "Pushes sent (w/o result checK)"})
+	successCount := prometheus.NewCounter(prometheus.CounterOpts{Namespace: "google", Subsystem: subsystemName, Name: "processed_tasks", Help: "Tasks processed by worker"})
+	failsCount := prometheus.NewCounter(prometheus.CounterOpts{Namespace: "google", Subsystem: subsystemName, Name: "failed_tasks", Help: "Failed tasks"})
+	pushesSent := prometheus.NewCounter(prometheus.CounterOpts{Namespace: "google", Subsystem: subsystemName, Name: "pushes_sent", Help: "Pushes sent (w/o result checK)"})
 	prometheus.MustRegister(successCount, failsCount, pushesSent)
 	workerLogger.Info("Started FCM worker")
 	for task = range d.getTasksChan() {
