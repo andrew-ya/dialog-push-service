@@ -7,10 +7,10 @@ name := "dialog-push-service"
 
 version := "0.0.6.1"
 
-scalaVersion := "2.11.11"
+scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
-  "io.grpc" % "grpc-netty" % "1.2.0",
+  "io.grpc" % "grpc-netty" % "1.6.1",
   "com.trueaccord.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf",
   "com.trueaccord.scalapb" %% "scalapb-runtime-grpc" % scalapbVersion
 )
